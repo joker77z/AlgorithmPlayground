@@ -6,21 +6,13 @@ function getSeconds(time) {
 
   return totalSeconds;
 }
-
-function checkOpeningAndOverTime(curSeconds, videoLenSeconds, opStartSeconds, opEndSeconds) {
-  if (curSeconds < 0) {
-    curSeconds = 0;
-  }
-  if (curSeconds > videoLenSeconds) {
-    curSeconds = videoLenSeconds;
-  }
+function checkOpeningAndOverTime(curSeconds, opStartSeconds, opEndSeconds) {
   if (opStartSeconds <= curSeconds && curSeconds <= opEndSeconds) {
     return opEndSeconds;
   } else {
     return curSeconds;
   }
 }
-
 function transformSecondsToTime(seconds) {
   const minute = Math.floor(seconds / 60);
   const second = Math.floor(seconds % 60);
@@ -42,14 +34,14 @@ function solution(video_len, pos, op_start, op_end, commands) {
   const opStartSeconds = getSeconds(op_start);
   const opEndSeconds = getSeconds(op_end);
 
-  curSeconds = checkOpeningAndOverTime(curSeconds, videoLenSeconds, opStartSeconds, opEndSeconds);
+  curSeconds = checkOpeningAndOverTime(curSeconds, opStartSeconds, opEndSeconds);
   commands.forEach((command) => {
     if (command === COMMAND.NEXT) {
-      curSeconds += 10;
+      curSeconds = Math.min(curSeconds + 10, videoLenSeconds);
     } else if (command === COMMAND.PREV) {
-      curSeconds -= 10;
+      curSeconds = Math.max(0, curSeconds - 10);
     }
-    curSeconds = checkOpeningAndOverTime(curSeconds, videoLenSeconds, opStartSeconds, opEndSeconds);
+    curSeconds = checkOpeningAndOverTime(curSeconds, opStartSeconds, opEndSeconds);
   });
 
   return transformSecondsToTime(curSeconds);
