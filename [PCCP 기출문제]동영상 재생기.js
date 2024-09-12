@@ -1,10 +1,11 @@
-function getSeconds(time) {
-  let totalSeconds = 0;
-  const [minute, second] = time.split(":");
-  totalSeconds += Number(minute) * 60;
-  totalSeconds += Number(second);
+const COMMAND = Object.freeze({
+  NEXT: "next",
+  PREV: "prev",
+});
 
-  return totalSeconds;
+function getSeconds(time) {
+  const [minute, second] = time.split(":");
+  return Number(minute) * 60 + Number(second);
 }
 function checkOpeningAndOverTime(curSeconds, opStartSeconds, opEndSeconds) {
   if (opStartSeconds <= curSeconds && curSeconds <= opEndSeconds) {
@@ -18,11 +19,6 @@ function transformSecondsToTime(seconds) {
   const second = Math.floor(seconds % 60);
   return `${minute.toString().padStart(2, "0")}:${second.toString().padStart(2, "0")}`;
 }
-
-const COMMAND = Object.freeze({
-  NEXT: "next",
-  PREV: "prev",
-});
 
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/340213?language=javascript
